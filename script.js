@@ -45,4 +45,28 @@ function moveDown() {
     }
 }
 
+//função de tiro
+function fireLaser() {
+    let laser = createLaserElement();
+    playerArea.appendChild(laser);
+    moveLaser();
+}
+
+function createLaserElement() {
+    let xPosition = parseInt(window.getComputedStyle(yourShip).getPropertyValue('left'));
+    let yPosition = parseInt(window.getComputedStyle(yourShip).getPropertyValue('top'));
+    let imageLaser = document.createElement('images');
+
+    imageLaser.src = 'images/shoot.png';
+    imageLaser.classList.add('laser');
+    imageLaser.style.left = `${xPosition}px`;
+    imageLaser.style.top = `${yPosition - 10}px`;
+
+    return imageLaser;
+}
+
+function moveLaser() {
+
+}
+
 window.addEventListener('keydown', flyShip);
