@@ -21,12 +21,28 @@ function flyShip(event) {
 function moveUp() {
     let topPosition = getComputedStyle(yourShip).getPropertyValue('top');
 
-    if(topPosition === "0px") {
+    if(topPosition === "10px") {
         return;
     }
     else {
         let position = parseInt(topPosition);
-        position -= 50;
+        position -= 40;
         yourShip.style.top = `${position}px`;
     }
 }
+
+//função de movimentação para baixo
+function moveDown() {
+    let topPosition = getComputedStyle(yourShip).getPropertyValue('top');
+
+    if(topPosition === "530px") {
+        return;
+    }
+    else {
+        let position = parseInt(topPosition);
+        position += 40;
+        yourShip.style.top = `${position}px`;
+    }
+}
+
+window.addEventListener('keydown', flyShip);
