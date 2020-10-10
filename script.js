@@ -69,7 +69,15 @@ function createLaserElement() {
 function moveLaser(laser) {
     let laserInterval = setInterval(() => {
         let xPosition = parseInt(laser.style.left);
-        
+        let aliens = document.querySelectorAll('.alien');
+        //compara se cada alien foi atingido, se sim, troca a imagem para a explosão.
+        aliens.forEach((alien) => {
+            if(checkLaserCollision(laser, alien)) {
+                alien.src = 'img/explosion.png';
+                alien.classList.remove('alien');
+                alien.classList.add('dead-alien');
+            }
+        })
         if(xPosition === 340) {
             laser.remove();
         }
@@ -79,6 +87,7 @@ function moveLaser(laser) {
 
     }, 10);
 }
+
 //função para criar inimigos aleatórios
 function createAliens() {
     let alien = document.createElement('img');
@@ -92,6 +101,48 @@ function createAliens() {
     moveAlien(alien); 
 }
 
+//função de movimentação dos inimigos
+function moveAlien(alien) {
+    let moveAliensInterval = setInterval(() => {
+        let xPosition = parseInt(window.getComputedStyle(alien).getPropertyValue('left'));
+
+        if(xPosition <= 50) {
+            if(Array.from(alien.classList).includes('dead-alien')) {
+                alien.remove();
+            }
+            else {
+                //gameOver();
+            }
+        }
+        else {
+            alien.style.left = `${xPosition - 4}px`;
+        }
+    }, 30);
+}
+
+//função que cria a colisão com os inimigos
+function checkLaserCollision(laser, alien) {
+    let laserTop = parseInt(laser.style.top);
+    let laserLeft = parseInt(laser.style.left);
+    let laserBottom = laserTop - 20;
+    
+    let alienTop = parseInt(alien.style.top);
+    let alienLeft = parseInt(alien.style.left);
+    let alienBottom = alienTop - 30;
+
+    if(laserLeft != 340 && laserLeft + 40 >= alienLeft) {
+        if(laserTop <= alienTop && laserTop >= alienBottom) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+}
 
 
 window.addEventListener('keydown', flyShip);
+createAliens();
