@@ -1,13 +1,13 @@
-const yourShip = document.querySelector('.player-shooter');
-const playerArea = document.querySelector('#main-play-area');
+const yourShip = document.querySelector(".player-shooter");
+const playArea = document.querySelector("#main-play-area");
 
 //função de movimentação e tiro da nave
 function flyShip(event) {
-    if(event.key === 'ArrowUp') {
+    if(event.key === "ArrowUp") {
         event.preventDefault();
         moveUp();
     }
-    else if(event.key === 'ArrowDown') {
+    else if(event.key === "ArrowDown") {
         event.preventDefault();
         moveDown();
     }
@@ -48,16 +48,16 @@ function moveDown() {
 //função de tiro
 function fireLaser() {
     let laser = createLaserElement();
-    playerArea.appendChild(laser);
-    moveLaser();
+    playArea.appendChild(laser);
+    moveLaser(laser);
 }
 
 function createLaserElement() {
     let xPosition = parseInt(window.getComputedStyle(yourShip).getPropertyValue('left'));
     let yPosition = parseInt(window.getComputedStyle(yourShip).getPropertyValue('top'));
-    let imageLaser = document.createElement('images');
+    let imageLaser = document.createElement("img");
 
-    imageLaser.src = 'images/shoot.png';
+    imageLaser.src = "./images/shoot.png";
     imageLaser.classList.add('laser');
     imageLaser.style.left = `${xPosition}px`;
     imageLaser.style.top = `${yPosition - 10}px`;
@@ -65,8 +65,18 @@ function createLaserElement() {
     return imageLaser;
 }
 
-function moveLaser() {
+function moveLaser(laser) {
+    let laserInterval = setInterval(() => {
+        let xPosition = parseInt(laser.style.left);
+        
+        if(xPosition === 340) {
+            laser.remove();
+        }
+        else {
+            laser.style.left = `${xPosition + 8}px`;
+        }
 
+    }, 10);
 }
 
 window.addEventListener('keydown', flyShip);
