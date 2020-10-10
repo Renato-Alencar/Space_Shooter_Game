@@ -1,6 +1,9 @@
 const yourShip = document.querySelector(".player-shooter");
 const playArea = document.querySelector("#main-play-area");
-const aliensImg = ['images/monster-1.png', 'images/monster-2.png', 'images/monster-3.png']
+const aliensImg = ['images/monster-1.png', 'images/monster-2.png', 'images/monster-3.png'];
+const instructionsText = document.querySelector('.game-instructions');
+const startButton = document.querySelector('.start-button');
+let alienInterval;
 
 //função de movimentação e tiro da nave
 function flyShip(event) {
@@ -73,7 +76,7 @@ function moveLaser(laser) {
         //compara se cada alien foi atingido, se sim, troca a imagem para a explosão.
         aliens.forEach((alien) => {
             if(checkLaserCollision(laser, alien)) {
-                alien.src = 'img/explosion.png';
+                alien.src = './images/explosion.png';
                 alien.classList.remove('alien');
                 alien.classList.add('dead-alien');
             }
@@ -91,12 +94,12 @@ function moveLaser(laser) {
 //função para criar inimigos aleatórios
 function createAliens() {
     let alien = document.createElement('img');
-    let alienSprite = aliensImg[Math.floor(Math.random() * aliensImg.length)]; //sorteando imagens
+    let alienSprite = aliensImg[Math.floor(Math.random() * aliensImg.length)]; //sorteando imagens dos inimigos
     alien.src = alienSprite;
     alien.classList.add('alien');
     alien.classList.add('alien-transition');
     alien.style.left = '370px'; 
-    alien.style.top = `${Math.floor(Math.random() * 330) * 30}px`;
+    alien.style.top = `${Math.floor(Math.random() * 330) + 30}px`;
     playArea.appendChild(alien);
     moveAlien(alien); 
 }
@@ -111,7 +114,7 @@ function moveAlien(alien) {
                 alien.remove();
             }
             else {
-                //gameOver();
+                gameOver();
             }
         }
         else {
@@ -143,6 +146,38 @@ function checkLaserCollision(laser, alien) {
     }
 }
 
+//início do jogo
+startButton.addEventListener('click',(event) => {
+    playGame();
+})
 
-window.addEventListener('keydown', flyShip);
-createAliens();
+function playGame() {
+    startButton.style.display ='none';
+    instructionsText.style.display = 'none';
+
+    window.addEventListener('keydown', flyShip);
+
+    alienInterval = setInterval(() => {
+        createAliens();
+    }, 2000);
+}
+
+//function de game over
+function gameOver() {
+
+    window.removeEventListener('keydown', flyShip);
+    clearInterval(alienInterval);
+
+    let aliens = document.querySelectorAll('.alien');
+    aliens.forEach((alien) => alien.remove());
+
+    let lasers = document.querySelectorAll('.laser');
+    lasers.forEach((laser) => laser.remove());
+
+    setTimeout(() => {
+        alert(`GAME OVER!`);
+        yourShip.style.top = '250px';
+        startButton.style.display = 'block';   
+        instructionsText.style.display = 'block';   
+    });
+}
